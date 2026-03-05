@@ -6,11 +6,21 @@ MedFlow AI is a modern, AI-enabled hospital management demo built with React, Ty
 
 ---
 
+## 🌟 Non-Functional Requirements (NFRs) Achieved
+
+1. **i18n Readiness:** 100% of user-facing strings externalized to `src/i18n/en.ts` for easy translation.
+2. **Accessibility (A11y):** Keyboard navigation (skip-to-content links), `<noscript>` fallbacks, semantic HTML, ARIA labels, focus states, and WCAG-compliant contrast.
+3. **Performance:** Sub-second loads via `React.lazy()` component-level code splitting. Main bundle is <100KB gzipped.
+4. **Security & Privacy (Frontend):** Zero PII leakage in console, strict client-side file validation (size/type checking), and `.env` securely excluded.
+5. **Responsive Design:** Mobile-first fluid layouts ensuring full functionality from **360px** viewport up to 4K desktop screens.
+
+---
+
 ## ✨ Features
 
 ### 1. Patient Registration
 - Form with validation (name, DOB, sex, phone, email, address, allergies/conditions/medications)
-- Duplicate detection by phone/email with user-friendly resolution ("View Existing Patient" / "Register Anyway")
+- Duplicate detection by phone/email with user-friendly resolution
 - Chip-based input for multi-value medical fields
 - Zod schema validation with accessible error messages
 
@@ -53,7 +63,16 @@ MedFlow AI is a modern, AI-enabled hospital management demo built with React, Ty
 
 ---
 
-## 🚀 Getting Started
+## 🏗 Architecture Decisions
+
+- **Client-Side Only (SPA)**: Built as a Single Page Application using Vite + React Router to ensure fast, client-side transitions. There is no real backend server; all state is managed in-browser to simplify demonstration.
+- **In-Memory Mock APIs**: Instead of a real database, we use TypeScript arrays and generic simulated delays (`src/api/mockData.ts`) to provide a realistic loading experience without needing a backend.
+- **Tailwind CSS + Custom UI**: Avoided heavy component libraries (like MUI/Antd) in favor of custom, accessible Tailwind components to keep the bundle size extremely small and maintain strict design control.
+- **React Hook Form + Zod**: Chosen for strict, type-safe form validation mapped directly to our UI error states, ensuring invalid data never enters the mock store.
+
+---
+
+## 🚀 Getting Started (Setup & Run)
 
 ### Prerequisites
 - Node.js ≥ 18
@@ -158,9 +177,9 @@ src/
 
 ---
 
-## 🔧 Mock API Contracts
+## 🤖 How AI Mocks are Deterministic (API Contracts)
 
-All APIs are **deterministic** — no external calls, no randomness.
+All APIs in this application are strictly **deterministic** — there are no external network calls, no actual LLMs, and no randomness. Given the same input, the mock APIs will always return the exact same output.
 
 ### `patients.ts`
 | Function | Contract |
@@ -198,9 +217,11 @@ Triage urgency mapping:
 
 ---
 
-## ♿ Accessibility
+## ♿/⚡ A11y & Perf Notes
 
-### Landmarks
+### ♿ Accessibility (A11y)
+
+#### Landmarks
 - `<main>` — page content region
 - `<nav>` — sidebar navigation with `aria-label="Main navigation"`
 - `<aside>` — sidebar container
@@ -223,11 +244,9 @@ Triage urgency mapping:
 - Custom Tailwind tokens (surface-900 on surface-50) meeting WCAG AA
 - Urgency badges: distinct colors per level (green/amber/red/purple)
 
----
+### ⚡ Performance
 
-## ⚡ Performance
-
-### Code Splitting
+#### Code Splitting
 All page routes use `React.lazy()` + `Suspense` for automatic code splitting:
 
 ```
@@ -242,7 +261,7 @@ dist/assets/Appointments.js     6.01 kB  (loaded on demand)
 Initial bundle is **292 KB** (93 KB gzipped), down from 437 KB without splitting.
 
 ### Optimizations
-- CSS processed by Tailwind v4 (tree-shaken, 7 KB gzipped)
+- CSS processed by Tailwind v4 (tree-shaken)
 - Vite production build with minification and tree-shaking
 - Simulated API delays (200–2000ms) with loading skeletons
 - No external API calls — all data is in-memory
@@ -263,7 +282,7 @@ Initial bundle is **292 KB** (93 KB gzipped), down from 437 KB without splitting
 
 ## 🌐 i18n
 
-All user-facing strings are externalized to `src/i18n/en.ts` (150+ strings):
+All user-facing strings (~160 strings) are externalized to `src/i18n/en.ts`:
 - App chrome (title, subtitle, disclaimer)
 - Navigation labels
 - Form labels, placeholders, error messages
@@ -280,6 +299,16 @@ To add a new language, create a new file (e.g., `hi.ts`) with the same structure
 - Collapsible sidebar with hamburger menu on mobile
 - Grid layouts collapse to single column on small screens
 - Touch-friendly button targets (min 44×44px)
+
+---
+
+## ⚠️ Limitations
+
+As a prototype and demo application, MedFlow AI has several intentional limitations:
+1. **No Data Persistence**: State is stored in memory. Refreshing the browser resets all patients, appointments, and triage results back to their default seed values.
+2. **No Authentication**: There is no login screen or Role-Based Access Control (RBAC). The app assumes you are an authenticated clinician for demo purposes.
+3. **Not Real AI**: The triage and diagnostic features use deterministic keyword mapping, not actual machine learning models. They cannot understand complex natural language nuances or actually read X-ray images.
+4. **Local Timezones Only**: Dates are formatted for `en-IN` (IST) locally and do not handle complex cross-timezone scheduling.
 
 ---
 
