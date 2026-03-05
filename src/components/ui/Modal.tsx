@@ -12,6 +12,7 @@ interface ModalProps {
 export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: ModalProps) {
     const overlayRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const hasFocused = useRef(false);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -26,8 +27,13 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: Mod
         if (isOpen) {
             document.addEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'hidden';
-            // Focus trap: focus the modal content
-            contentRef.current?.focus();
+            // Focus the modal content only once when it first opens
+            if (!hasFocused.current) {
+                contentRef.current?.focus();
+                hasFocused.current = true;
+            }
+        } else {
+            hasFocused.current = false;
         }
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
