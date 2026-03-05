@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { strings } from './i18n/en';
 
 /* ─── lazy-loaded page components (code-splitting) ─── */
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
@@ -13,7 +14,7 @@ const Triage = lazy(() => import('./pages/Triage').then(m => ({ default: m.Triag
 
 function PageFallback() {
   return (
-    <div className="flex items-center justify-center py-24">
+    <div className="flex items-center justify-center py-24" role="status" aria-label={strings.app.loadingPage}>
       <div className="w-8 h-8 border-3 border-surface-200 border-t-primary-500 rounded-full animate-spin" />
     </div>
   );

@@ -25,7 +25,7 @@ export function PatientDetail() {
 
     if (isLoading) {
         return (
-            <div className="max-w-2xl mx-auto space-y-4 animate-pulse">
+            <div className="max-w-2xl mx-auto space-y-4 animate-pulse" role="status" aria-label={strings.common.loading}>
                 <div className="h-8 w-48 bg-surface-200 rounded" />
                 <div className="h-64 bg-surface-100 rounded-xl" />
             </div>
@@ -35,9 +35,9 @@ export function PatientDetail() {
     if (!patient) {
         return (
             <Card className="text-center py-12 max-w-md mx-auto">
-                <p className="text-surface-500">Patient not found.</p>
+                <p className="text-surface-500">{strings.patients.notFound}</p>
                 <Button variant="secondary" className="mt-4" onClick={() => navigate('/patients')}>
-                    Back to Patients
+                    {strings.patients.backToPatients}
                 </Button>
             </Card>
         );
@@ -53,11 +53,11 @@ export function PatientDetail() {
                 <button
                     onClick={() => navigate('/patients')}
                     className="p-2 rounded-lg hover:bg-surface-100 transition-colors"
-                    aria-label="Back to patients"
+                    aria-label={strings.patients.backToPatients}
                 >
                     <ArrowLeft size={20} className="text-surface-600" />
                 </button>
-                <h1 className="text-2xl font-bold text-surface-900">
+                <h1 className="text-xl sm:text-2xl font-bold text-surface-900 truncate">
                     {patient.firstName} {patient.lastName}
                 </h1>
             </div>
@@ -65,35 +65,35 @@ export function PatientDetail() {
             {/* Profile card */}
             <Card>
                 <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-bold text-xl shrink-0">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-bold text-lg sm:text-xl shrink-0">
                         {patient.firstName[0]}{patient.lastName[0]}
                     </div>
-                    <div className="flex-1 space-y-3">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="flex-1 space-y-3 min-w-0">
+                        <div className="grid grid-cols-3 gap-3">
                             <div>
-                                <p className="text-xs text-surface-500">Sex</p>
+                                <p className="text-xs text-surface-500">{strings.patients.sexLabel}</p>
                                 <p className="text-sm font-medium text-surface-900 capitalize">{patient.sex}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-surface-500">Age</p>
-                                <p className="text-sm font-medium text-surface-900">{age} years</p>
+                                <p className="text-xs text-surface-500">{strings.patients.ageLabel}</p>
+                                <p className="text-sm font-medium text-surface-900">{age} {strings.patients.years}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-surface-500">DOB</p>
+                                <p className="text-xs text-surface-500">{strings.patients.dobLabel}</p>
                                 <p className="text-sm font-medium text-surface-900">
                                     {new Date(patient.birthDate).toLocaleDateString('en-IN')}
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
-                            <span className="text-sm text-surface-600 flex items-center gap-1.5">
-                                <Phone size={14} className="text-surface-400" /> {patient.phone}
+                        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-x-5 sm:gap-y-2 pt-1">
+                            <span className="text-sm text-surface-600 flex items-center gap-1.5 truncate">
+                                <Phone size={14} className="text-surface-400 shrink-0" aria-hidden="true" /> {patient.phone}
+                            </span>
+                            <span className="text-sm text-surface-600 flex items-center gap-1.5 truncate">
+                                <Mail size={14} className="text-surface-400 shrink-0" aria-hidden="true" /> {patient.email}
                             </span>
                             <span className="text-sm text-surface-600 flex items-center gap-1.5">
-                                <Mail size={14} className="text-surface-400" /> {patient.email}
-                            </span>
-                            <span className="text-sm text-surface-600 flex items-center gap-1.5">
-                                <MapPin size={14} className="text-surface-400" /> {patient.address}
+                                <MapPin size={14} className="text-surface-400 shrink-0" aria-hidden="true" /> {patient.address}
                             </span>
                         </div>
                     </div>
@@ -104,11 +104,11 @@ export function PatientDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Card>
                     <div className="flex items-center gap-2 mb-3">
-                        <AlertTriangle size={16} className="text-danger-500" />
+                        <AlertTriangle size={16} className="text-danger-500" aria-hidden="true" />
                         <h3 className="text-sm font-semibold text-surface-800">{strings.patients.allergies}</h3>
                     </div>
                     {patient.allergies.length === 0 ? (
-                        <p className="text-sm text-surface-400">None reported</p>
+                        <p className="text-sm text-surface-400">{strings.common.noneReported}</p>
                     ) : (
                         <div className="flex flex-wrap gap-1.5">
                             {patient.allergies.map((a) => (
@@ -120,11 +120,11 @@ export function PatientDetail() {
 
                 <Card>
                     <div className="flex items-center gap-2 mb-3">
-                        <Heart size={16} className="text-warning-500" />
+                        <Heart size={16} className="text-warning-500" aria-hidden="true" />
                         <h3 className="text-sm font-semibold text-surface-800">{strings.patients.conditions}</h3>
                     </div>
                     {patient.conditions.length === 0 ? (
-                        <p className="text-sm text-surface-400">None reported</p>
+                        <p className="text-sm text-surface-400">{strings.common.noneReported}</p>
                     ) : (
                         <div className="flex flex-wrap gap-1.5">
                             {patient.conditions.map((c) => (
@@ -136,11 +136,11 @@ export function PatientDetail() {
 
                 <Card>
                     <div className="flex items-center gap-2 mb-3">
-                        <Pill size={16} className="text-accent-500" />
+                        <Pill size={16} className="text-accent-500" aria-hidden="true" />
                         <h3 className="text-sm font-semibold text-surface-800">{strings.patients.medications}</h3>
                     </div>
                     {patient.medications.length === 0 ? (
-                        <p className="text-sm text-surface-400">None reported</p>
+                        <p className="text-sm text-surface-400">{strings.common.noneReported}</p>
                     ) : (
                         <div className="flex flex-wrap gap-1.5">
                             {patient.medications.map((m) => (
@@ -154,12 +154,12 @@ export function PatientDetail() {
             {/* Appointments */}
             <div>
                 <h2 className="text-lg font-semibold text-surface-800 mb-3 flex items-center gap-2">
-                    <Calendar size={18} className="text-primary-500" />
-                    Appointments
+                    <Calendar size={18} className="text-primary-500" aria-hidden="true" />
+                    {strings.appointments.title}
                 </h2>
                 {appointments.length === 0 ? (
                     <Card className="text-center py-8">
-                        <p className="text-sm text-surface-400">No appointments found</p>
+                        <p className="text-sm text-surface-400">{strings.appointments.noAppointments}</p>
                     </Card>
                 ) : (
                     <div className="space-y-2">
@@ -167,12 +167,12 @@ export function PatientDetail() {
                             const provider = getProvider(appt.providerId);
                             return (
                                 <Card key={appt.id} padding="sm" hover>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <Clock size={14} className="text-surface-400" />
-                                            <div>
-                                                <p className="text-sm font-medium text-surface-800">
-                                                    {provider?.name || 'Unknown'} — {appt.reason}
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <Clock size={14} className="text-surface-400 mt-0.5 shrink-0" aria-hidden="true" />
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-surface-800 truncate">
+                                                    {provider?.name || strings.common.unknown} — {appt.reason}
                                                 </p>
                                                 <p className="text-xs text-surface-500">
                                                     {new Date(appt.start).toLocaleString('en-IN', {

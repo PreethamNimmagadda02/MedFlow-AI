@@ -25,9 +25,9 @@ export function Patients() {
         <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-surface-900">{strings.patients.title}</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-surface-900">{strings.patients.title}</h1>
                     <p className="text-sm text-surface-500 mt-1">
-                        {patients.length} patient{patients.length !== 1 ? 's' : ''} registered
+                        {strings.patients.totalCount(patients.length)}
                     </p>
                 </div>
                 <Link to="/patients/register">
@@ -72,29 +72,29 @@ export function Patients() {
                         >
                             <Card hover padding="md">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-semibold text-sm shrink-0">
+                                    <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-semibold text-xs sm:text-sm shrink-0">
                                             {patient.firstName[0]}
                                             {patient.lastName[0]}
                                         </div>
-                                        <div>
-                                            <p className="font-semibold text-surface-900">
+                                        <div className="min-w-0">
+                                            <p className="font-semibold text-surface-900 text-sm sm:text-base truncate">
                                                 {patient.firstName} {patient.lastName}
                                             </p>
-                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    <Phone size={12} /> {patient.phone}
+                                            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-x-4 sm:gap-y-1 mt-1">
+                                                <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1 truncate">
+                                                    <Phone size={12} aria-hidden="true" /> {patient.phone}
                                                 </span>
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    <Mail size={12} /> {patient.email}
+                                                <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1 truncate">
+                                                    <Mail size={12} aria-hidden="true" /> {patient.email}
                                                 </span>
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    <MapPin size={12} /> {patient.address}
+                                                <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1">
+                                                    <MapPin size={12} aria-hidden="true" /> {patient.address}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 pl-15 sm:pl-0">
+                                    <div className="flex items-center gap-2 pl-12 sm:pl-0 flex-wrap">
                                         {patient.conditions.length > 0 && (
                                             <div className="flex flex-wrap gap-1">
                                                 {patient.conditions.map((c) => (

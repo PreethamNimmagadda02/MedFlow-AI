@@ -52,7 +52,7 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: Mod
     return (
         <div
             ref={overlayRef}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-fade-in"
             onClick={(e) => {
                 if (e.target === overlayRef.current) onClose();
             }}
@@ -63,9 +63,9 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: Mod
             <div
                 ref={contentRef}
                 tabIndex={-1}
-                className={`w-full ${maxWidthClasses[maxWidth]} bg-white rounded-2xl shadow-xl animate-scale-in overflow-hidden`}
+                className={`w-full ${maxWidthClasses[maxWidth]} bg-white rounded-t-2xl sm:rounded-2xl shadow-xl animate-scale-in overflow-hidden max-h-[90vh] sm:max-h-auto`}
             >
-                <div className="flex items-center justify-between px-6 py-4 border-b border-surface-200">
+                <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-surface-200">
                     <h2 className="text-lg font-semibold text-surface-900">{title}</h2>
                     <button
                         onClick={onClose}
@@ -75,7 +75,7 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: Mod
                         <X size={20} />
                     </button>
                 </div>
-                <div className="px-6 py-4 max-h-[70vh] overflow-y-auto">{children}</div>
+                <div className="px-4 sm:px-6 py-3 sm:py-4 max-h-[70vh] overflow-y-auto">{children}</div>
             </div>
         </div>
     );

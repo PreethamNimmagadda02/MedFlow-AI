@@ -25,6 +25,13 @@ export function Layout() {
 
     return (
         <div className="min-h-screen flex bg-surface-50">
+            {/* Skip to content link — first focusable element */}
+            <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:text-sm focus:font-medium"
+            >
+                {strings.app.skipToContent}
+            </a>
             {/* Mobile overlay */}
             {sidebarOpen && (
                 <div
@@ -105,7 +112,7 @@ export function Layout() {
                 </header>
 
                 {/* Page content */}
-                <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+                <main id="main-content" className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
                     <Outlet />
                 </main>
             </div>

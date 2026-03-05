@@ -47,7 +47,7 @@ export function Appointments() {
     const handleCancel = async () => {
         if (!cancelModal) return;
         await cancelAppt.mutateAsync(cancelModal);
-        showToast('info', 'Appointment cancelled.');
+        showToast('info', strings.appointments.cancelSuccess);
         setCancelModal(null);
     };
 
@@ -55,7 +55,7 @@ export function Appointments() {
         if (!rescheduleModal || !newSlot) return;
         const isoSlot = new Date(newSlot).toISOString();
         await rescheduleAppt.mutateAsync({ id: rescheduleModal, newStart: isoSlot });
-        showToast('success', 'Appointment rescheduled.');
+        showToast('success', strings.appointments.rescheduleSuccess);
         setRescheduleModal(null);
         setNewSlot('');
     };
@@ -70,9 +70,9 @@ export function Appointments() {
     return (
         <div className="space-y-6 animate-fade-in">
             <div>
-                <h1 className="text-2xl font-bold text-surface-900">{strings.appointments.title}</h1>
+                <h1 className="text-xl sm:text-2xl font-bold text-surface-900">{strings.appointments.title}</h1>
                 <p className="text-sm text-surface-500 mt-1">
-                    {appointments.length} total appointment{appointments.length !== 1 ? 's' : ''}
+                    {strings.appointments.totalCount(appointments.length)}
                 </p>
             </div>
 
@@ -84,13 +84,13 @@ export function Appointments() {
                         role="tab"
                         aria-selected={activeTab === tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === tab
+                        className={`flex-1 px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${activeTab === tab
                             ? 'bg-white text-surface-900 shadow-sm'
                             : 'text-surface-500 hover:text-surface-700'
                             }`}
                     >
                         {strings.appointments[tab.toLowerCase() as 'scheduled' | 'completed' | 'cancelled']}{' '}
-                        <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${activeTab === tab ? 'bg-primary-100 text-primary-700' : 'bg-surface-200 text-surface-500'
+                        <span className={`ml-0.5 sm:ml-1 px-1.5 py-0.5 rounded-full text-xs ${activeTab === tab ? 'bg-primary-100 text-primary-700' : 'bg-surface-200 text-surface-500'
                             }`}>
                             {tabCounts[tab]}
                         </span>
@@ -99,86 +99,88 @@ export function Appointments() {
             </div>
 
             {/* Appointment list */}
-            {filtered.length === 0 ? (
-                <Card className="text-center py-12">
-                    <Calendar size={40} className="text-surface-300 mx-auto mb-3" />
-                    <p className="text-surface-500">{strings.appointments.noAppointments}</p>
-                </Card>
-            ) : (
-                <div className="space-y-3">
-                    {filtered.map((appt, idx) => {
-                        const patient = getPatient(appt.patientId);
-                        const provider = getProvider(appt.providerId);
-                        return (
-                            <Card
-                                key={appt.id}
-                                hover
-                                className="animate-fade-in"
-                                style={{ animationDelay: `${idx * 50}ms` }}
-                            >
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div className="flex items-start gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-semibold text-sm shrink-0">
-                                            {patient
-                                                ? `${patient.firstName[0]}${patient.lastName[0]}`
-                                                : '??'}
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-surface-900">
+            <div role="tabpanel">
+                {filtered.length === 0 ? (
+                    <Card className="text-center py-12">
+                        <Calendar size={40} className="text-surface-300 mx-auto mb-3" aria-hidden="true" />
+                        <p className="text-surface-500">{strings.appointments.noAppointments}</p>
+                    </Card>
+                ) : (
+                    <div className="space-y-3">
+                        {filtered.map((appt, idx) => {
+                            const patient = getPatient(appt.patientId);
+                            const provider = getProvider(appt.providerId);
+                            return (
+                                <Card
+                                    key={appt.id}
+                                    hover
+                                    className="animate-fade-in"
+                                    style={{ animationDelay: `${idx * 50}ms` }}
+                                >
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                                        <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+                                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 text-white flex items-center justify-center font-semibold text-xs sm:text-sm shrink-0">
                                                 {patient
-                                                    ? `${patient.firstName} ${patient.lastName}`
-                                                    : 'Unknown Patient'}
-                                            </p>
-                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    <Stethoscope size={12} />
-                                                    {provider?.name || 'Unknown'}
-                                                </span>
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    <Clock size={12} />
-                                                    {formatDateTime(appt.start)}
-                                                </span>
-                                                <span className="text-sm text-surface-500 flex items-center gap-1">
-                                                    {appt.channel === 'video' ? <Video size={12} /> : <MapPin size={12} />}
-                                                    {appt.channel === 'video' ? 'Video' : 'In-person'}
-                                                </span>
+                                                    ? `${patient.firstName[0]}${patient.lastName[0]}`
+                                                    : '??'}
                                             </div>
-                                            <p className="text-sm text-surface-600 mt-1">{appt.reason}</p>
+                                            <div className="min-w-0">
+                                                <p className="font-medium text-surface-900 text-sm sm:text-base truncate">
+                                                    {patient
+                                                        ? `${patient.firstName} ${patient.lastName}`
+                                                        : strings.common.unknownPatient}
+                                                </p>
+                                                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1 sm:gap-x-4 sm:gap-y-1 mt-1">
+                                                    <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1">
+                                                        <Stethoscope size={12} aria-hidden="true" />
+                                                        {provider?.name || strings.common.unknown}
+                                                    </span>
+                                                    <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1">
+                                                        <Clock size={12} aria-hidden="true" />
+                                                        {formatDateTime(appt.start)}
+                                                    </span>
+                                                    <span className="text-xs sm:text-sm text-surface-500 flex items-center gap-1">
+                                                        {appt.channel === 'video' ? <Video size={12} aria-hidden="true" /> : <MapPin size={12} aria-hidden="true" />}
+                                                        {appt.channel === 'video' ? strings.scheduling.videoShort : strings.scheduling.inPersonShort}
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs sm:text-sm text-surface-600 mt-1 truncate">{appt.reason}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 pl-12 sm:pl-0 shrink-0 flex-wrap">
+                                            <Badge variant={getStatusBadgeVariant(appt.status)} dot>
+                                                {appt.status}
+                                            </Badge>
+                                            {appt.status === 'Scheduled' && (
+                                                <>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => setRescheduleModal(appt.id)}
+                                                    >
+                                                        <CalendarClock size={14} aria-hidden="true" />
+                                                        <span className="hidden sm:inline">{strings.appointments.reschedule}</span>
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => setCancelModal(appt.id)}
+                                                        className="text-danger-600 hover:bg-danger-50"
+                                                    >
+                                                        <CalendarX size={14} aria-hidden="true" />
+                                                        <span className="hidden sm:inline">{strings.appointments.cancel}</span>
+                                                    </Button>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
-
-                                    <div className="flex items-center gap-2 pl-14 sm:pl-0 shrink-0">
-                                        <Badge variant={getStatusBadgeVariant(appt.status)} dot>
-                                            {appt.status}
-                                        </Badge>
-                                        {appt.status === 'Scheduled' && (
-                                            <>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => setRescheduleModal(appt.id)}
-                                                >
-                                                    <CalendarClock size={14} />
-                                                    {strings.appointments.reschedule}
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => setCancelModal(appt.id)}
-                                                    className="text-danger-600 hover:bg-danger-50"
-                                                >
-                                                    <CalendarX size={14} />
-                                                    {strings.appointments.cancel}
-                                                </Button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </Card>
-                        );
-                    })}
-                </div>
-            )}
+                                </Card>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
 
             {/* Cancel confirmation modal */}
             <Modal
@@ -189,7 +191,7 @@ export function Appointments() {
             >
                 <div className="space-y-4">
                     <p className="text-sm text-surface-600">{strings.appointments.cancelConfirm}</p>
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
                         <Button variant="secondary" onClick={() => setCancelModal(null)}>
                             {strings.common.back}
                         </Button>
@@ -219,7 +221,7 @@ export function Appointments() {
                             className="w-full px-3.5 py-2.5 rounded-lg border border-surface-300 bg-white text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-100 focus:outline-none"
                         />
                     </div>
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
                         <Button variant="secondary" onClick={() => setRescheduleModal(null)}>
                             {strings.common.cancel}
                         </Button>

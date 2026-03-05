@@ -135,8 +135,8 @@ export function Triage() {
     return (
         <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
             <div>
-                <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
-                    <Brain size={24} className="text-primary-500" />
+                <h1 className="text-xl sm:text-2xl font-bold text-surface-900 flex items-center gap-2">
+                    <Brain size={24} className="text-primary-500" aria-hidden="true" />
                     {strings.triage.title}
                 </h1>
                 <p className="text-sm text-surface-500 mt-1">
@@ -178,7 +178,7 @@ export function Triage() {
                                 <Heart size={14} className="text-danger-500" />
                                 {strings.triage.vitals}
                             </legend>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <Input
                                     label={strings.triage.temperature}
                                     type="number"
@@ -212,7 +212,7 @@ export function Triage() {
                         </fieldset>
 
                         {/* Additional info */}
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <Input
                                 label={strings.triage.onsetDays}
                                 type="number"
@@ -231,9 +231,9 @@ export function Triage() {
                                 label={strings.triage.sex}
                                 required
                                 options={[
-                                    { value: 'male', label: 'Male' },
-                                    { value: 'female', label: 'Female' },
-                                    { value: 'other', label: 'Other' },
+                                    { value: 'male', label: strings.patients.sexOptions.male },
+                                    { value: 'female', label: strings.patients.sexOptions.female },
+                                    { value: 'other', label: strings.patients.sexOptions.other },
                                 ]}
                                 {...register('sex')}
                                 error={errors.sex?.message}
@@ -413,7 +413,7 @@ export function Triage() {
                             <div className="mt-4 p-4 rounded-xl bg-surface-50 border border-surface-200 animate-fade-in space-y-2">
                                 <p className="text-sm font-medium text-surface-800">{diagnosticResult.summary}</p>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs text-surface-500">Confidence:</span>
+                                    <span className="text-xs text-surface-500">{strings.triage.confidence}:</span>
                                     <span className="text-sm font-bold text-surface-900">
                                         {Math.round(diagnosticResult.confidence * 100)}%
                                     </span>

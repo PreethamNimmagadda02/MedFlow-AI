@@ -48,12 +48,12 @@ export function Dashboard() {
 
     const getPatientName = (id: string) => {
         const p = patients.find((pat) => pat.id === id);
-        return p ? `${p.firstName} ${p.lastName}` : 'Unknown';
+        return p ? `${p.firstName} ${p.lastName}` : strings.common.unknown;
     };
 
     const getProviderName = (id: string) => {
         const p = providers.find((prov) => prov.id === id);
-        return p ? p.name : 'Unknown';
+        return p ? p.name : strings.common.unknown;
     };
 
     const formatTime = (iso: string) => {
@@ -75,9 +75,9 @@ export function Dashboard() {
         <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-surface-900">{strings.dashboard.title}</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-surface-900">{strings.dashboard.title}</h1>
                     <p className="text-sm text-surface-500 mt-1">
-                        Overview for {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        {strings.dashboard.overviewFor} {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
                 </div>
             </div>
@@ -113,16 +113,16 @@ export function Dashboard() {
             </div>
 
             {/* Stats grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {statCards.map((stat) => (
                     <Card key={stat.label} className="relative overflow-hidden" hover>
                         <div className="flex items-start justify-between">
                             <div>
-                                <p className="text-sm text-surface-500 font-medium">{stat.label}</p>
-                                <p className="text-3xl font-bold text-surface-900 mt-1">{stat.value}</p>
+                                <p className="text-xs sm:text-sm text-surface-500 font-medium">{stat.label}</p>
+                                <p className="text-2xl sm:text-3xl font-bold text-surface-900 mt-1">{stat.value}</p>
                             </div>
-                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-sm`}>
-                                <stat.icon size={18} className="text-white" />
+                            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-sm`}>
+                                <stat.icon size={16} className="text-white sm:w-[18px] sm:h-[18px]" aria-hidden="true" />
                             </div>
                         </div>
                         <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${stat.color}`} />
@@ -133,13 +133,13 @@ export function Dashboard() {
             {/* Appointments list */}
             <div>
                 <h2 className="text-lg font-semibold text-surface-900 mb-4 flex items-center gap-2">
-                    <TrendingUp size={20} className="text-primary-500" />
+                    <TrendingUp size={20} className="text-primary-500" aria-hidden="true" />
                     {strings.dashboard.todayAppointments}
                 </h2>
 
                 {filteredAppointments.length === 0 ? (
                     <Card className="text-center py-12">
-                        <Calendar size={40} className="text-surface-300 mx-auto mb-3" />
+                        <Calendar size={40} className="text-surface-300 mx-auto mb-3" aria-hidden="true" />
                         <p className="text-surface-500">{strings.dashboard.noAppointmentsToday}</p>
                     </Card>
                 ) : (
@@ -152,41 +152,41 @@ export function Dashboard() {
                                 padding="none"
                             >
                                 <div
-                                    className="p-4"
+                                    className="p-3 sm:p-4"
                                     onClick={() =>
                                         setExpandedAppt(expandedAppt === appt.id ? null : appt.id)
                                     }
                                     style={{ animationDelay: `${idx * 50}ms` }}
                                 >
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold text-sm shrink-0">
+                                        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold text-xs sm:text-sm shrink-0">
                                                 {getPatientName(appt.patientId)
                                                     .split(' ')
                                                     .map((n) => n[0])
                                                     .join('')}
                                             </div>
-                                            <div>
-                                                <p className="font-medium text-surface-900">
+                                            <div className="min-w-0">
+                                                <p className="font-medium text-surface-900 text-sm sm:text-base truncate">
                                                     {getPatientName(appt.patientId)}
                                                 </p>
-                                                <p className="text-sm text-surface-500">
+                                                <p className="text-xs sm:text-sm text-surface-500 truncate">
                                                     {getProviderName(appt.providerId)} · {appt.reason}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-3 pl-14 sm:pl-0">
-                                            <div className="flex items-center gap-1.5 text-sm text-surface-600">
-                                                <Clock size={14} />
+                                        <div className="flex items-center gap-2 sm:gap-3 pl-12 sm:pl-0 flex-wrap">
+                                            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-surface-600">
+                                                <Clock size={14} aria-hidden="true" />
                                                 {formatTime(appt.start)}
                                             </div>
-                                            <div className="flex items-center gap-1.5 text-sm text-surface-600">
+                                            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-surface-600">
                                                 {appt.channel === 'video' ? (
-                                                    <Video size={14} />
+                                                    <Video size={14} aria-hidden="true" />
                                                 ) : (
-                                                    <MapPin size={14} />
+                                                    <MapPin size={14} aria-hidden="true" />
                                                 )}
-                                                {appt.channel === 'video' ? 'Video' : 'In-person'}
+                                                {appt.channel === 'video' ? strings.scheduling.videoShort : strings.scheduling.inPersonShort}
                                             </div>
                                             <Badge variant={getStatusBadgeVariant(appt.status)} dot>
                                                 {appt.status}
@@ -197,7 +197,7 @@ export function Dashboard() {
                                                 </Badge>
                                             )}
                                             <button
-                                                aria-label={expandedAppt === appt.id ? 'Collapse details' : 'Expand details'}
+                                                aria-label={expandedAppt === appt.id ? strings.dashboard.collapseDetails : strings.dashboard.expandDetails}
                                                 className="p-1"
                                             >
                                                 {expandedAppt === appt.id ? (
@@ -212,10 +212,10 @@ export function Dashboard() {
 
                                 {/* Expanded triage info */}
                                 {expandedAppt === appt.id && appt.triageResult && (
-                                    <div className="px-4 pb-4 pt-2 border-t border-surface-100 animate-fade-in">
-                                        <div className="ml-14 space-y-3">
+                                    <div className="px-3 sm:px-4 pb-4 pt-2 border-t border-surface-100 animate-fade-in">
+                                        <div className="ml-0 sm:ml-14 space-y-3">
                                             <h3 className="text-sm font-semibold text-surface-700 flex items-center gap-1.5">
-                                                <Brain size={14} className="text-primary-500" />
+                                                <Brain size={14} className="text-primary-500" aria-hidden="true" />
                                                 {strings.dashboard.triageOutcome}
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -247,7 +247,7 @@ export function Dashboard() {
                                                     <ul className="space-y-1">
                                                         {appt.triageResult.guidance.map((g, i) => (
                                                             <li key={i} className="text-sm text-surface-700 flex items-start gap-1.5">
-                                                                <span className="text-primary-500 mt-1">•</span>
+                                                                <span className="text-primary-500 mt-1" aria-hidden="true">•</span>
                                                                 {g}
                                                             </li>
                                                         ))}

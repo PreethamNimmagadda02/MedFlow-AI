@@ -3,6 +3,9 @@ export const strings = {
         title: 'MedFlow AI',
         subtitle: 'Hospital Management System',
         disclaimer: 'Not medical advice. Prototype only. Synthetic data — no real PHI/PII.',
+        noscript: 'JavaScript is required to run this application. Please enable JavaScript in your browser settings.',
+        skipToContent: 'Skip to content',
+        loadingPage: 'Loading page',
     },
     nav: {
         dashboard: 'Dashboard',
@@ -43,9 +46,19 @@ export const strings = {
         medicalInfo: 'Medical Information',
         duplicateUseExisting: 'View Existing Patient',
         duplicateCreateAnyway: 'Register Anyway (Different Person)',
+        notFound: 'Patient not found.',
+        backToPatients: 'Back to Patients',
+        sexLabel: 'Sex',
+        ageLabel: 'Age',
+        dobLabel: 'DOB',
+        years: 'years',
+        totalCount: (count: number) => `${count} patient${count !== 1 ? 's' : ''} registered`,
+        matchedOn: (field: string) => `matched on ${field}`,
+        existing: 'Existing',
     },
     scheduling: {
         title: 'Schedule Appointment',
+        subtitle: 'Find a provider and book an appointment',
         searchProvider: 'Search providers...',
         specialty: 'Specialty',
         allSpecialties: 'All Specialties',
@@ -54,12 +67,18 @@ export const strings = {
         noProviders: 'No providers found matching your criteria.',
         noSlots: 'No available slots for this provider.',
         selectPatient: 'Select Patient',
+        selectPatientPlaceholder: 'Select a patient...',
         reason: 'Reason for Visit',
+        reasonPlaceholder: 'e.g., Fever and sore throat',
         channel: 'Visit Type',
         inPerson: 'In Person',
         video: 'Video Call',
+        videoShort: 'Video',
+        inPersonShort: 'In-person',
         bookAppointment: 'Book Appointment',
         bookingSuccess: 'Appointment booked successfully!',
+        moreSlots: (count: number) => `+${count} more`,
+        bookSlotLabel: (date: string, time: string) => `Book slot: ${date}, ${time}`,
     },
     appointments: {
         title: 'Appointments',
@@ -74,6 +93,9 @@ export const strings = {
         noAppointments: 'No appointments found.',
         confirmCancel: 'Confirm Cancellation',
         confirmReschedule: 'Confirm Reschedule',
+        totalCount: (count: number) => `${count} total appointment${count !== 1 ? 's' : ''}`,
+        cancelSuccess: 'Appointment cancelled.',
+        rescheduleSuccess: 'Appointment rescheduled.',
     },
     triage: {
         title: 'AI Triage Assessment',
@@ -118,6 +140,9 @@ export const strings = {
         allProviders: 'All Providers',
         noAppointmentsToday: 'No appointments scheduled for today.',
         triageOutcome: 'Triage Outcome',
+        overviewFor: 'Overview for',
+        expandDetails: 'Expand details',
+        collapseDetails: 'Collapse details',
         stats: {
             total: 'Total Today',
             scheduled: 'Scheduled',
@@ -138,6 +163,7 @@ export const strings = {
         invalidPhone: 'Please enter a valid phone number',
         unknown: 'Unknown',
         unknownPatient: 'Unknown Patient',
+        noneReported: 'None reported',
     },
 } as const;
 
@@ -152,5 +178,7 @@ export function t(path: string): string {
             return path;
         }
     }
-    return typeof current === 'string' ? current : path;
+    if (typeof current === 'string') return current;
+    if (typeof current === 'function') return current;
+    return path;
 }
